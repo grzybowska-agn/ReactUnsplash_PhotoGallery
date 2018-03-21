@@ -1,0 +1,75 @@
+.collectionTitle {
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  font-weight: normal;
+  @media (max-width:768px) {
+    font-size: 1rem;
+  }
+}
+
+a > .collectionTitle {
+  position: relative;
+
+  &::after {
+    content: '\27F6';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translate(0, -50%);
+    margin-left: 10px;
+  }
+}
+
+.photoPanel {
+  max-width: 800px;
+  margin: 20px auto 60px;
+  @media (max-width:768px) {
+    width: 80%;
+  }
+}
+
+.photoPanelTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  @media (max-width:768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 35px;
+  }
+}
+
+
+button {
+  background: #f9f9f9;
+  border: none;
+  padding: 10px 15px;
+  margin-left: 10px;
+  color: #999;
+  font-size: .9rem;
+  box-shadow: 0 1px 1px rgba(102,119,136,.5);
+  cursor: pointer;
+  
+  &:hover {
+    color: #111;
+  }
+}
+
+.active {
+  position: relative;
+  box-shadow: 0 1px 1px rgba(102,119,136,.5);
+  color: #111;
+
+   &::before {
+     content: '\2713';
+     padding-right: 10px;
+   }
+}
+
+.photoGrid {
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(130px,1fr));
+}

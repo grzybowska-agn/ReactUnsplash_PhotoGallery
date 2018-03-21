@@ -1,0 +1,42 @@
+.photoPage {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  @media (max-width:768px) {
+    width: 80%;
+  }
+
+  .photoContainer {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+
+
+    .photoDetails {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      font-size: .9rem;
+      margin: 15px 0;
+
+      p {
+        padding: 0;
+        margin: 0;
+        line-height: 1.5rem;
+      }
+
+    }
+
+    img {
+      display: block;
+      max-height: 65vh;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      box-shadow: 0 1px 1px rgba(102, 119, 136, 0.9)
+    }
+  }
+}

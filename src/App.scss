@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: normal;
+  @media (max-width:768px) {
+    font-size: 1.2rem;
+  }
+}
+
+a {
+  color: unset;
+
+  h2 {
+    text-decoration: underline;
+  }
+
+  h2:hover {
+    text-decoration: none;
+  }
+}
+
+.app {
+  @media (max-width:768px) {
+    display: flex;
+    justify-content: center;
+  }
+}
