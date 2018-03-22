@@ -20,13 +20,22 @@ class PhotoPage extends Component {
     const { photo } = this.state
 
     if (!photo) {
-      this.fetchPhoto(id)
+      this.fetchPhoto(id, false)
     }
 
     this.fbLoadApi()
   }
 
   fbLoadApi() {
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0]
+      if (d.getElementById(id)) return
+      js = d.createElement(s)
+      js.id = id
+      js.src = "//connect.facebook.net/en_US/sdk.js"
+      fjs.parentNode.insertBefore(js, fjs)
+  }(document, 'script', 'facebook-jssdk'))
+
     window.fbAsyncInit = function() {
       FB.init({
           appId      : '115517331888071',
@@ -34,25 +43,23 @@ class PhotoPage extends Component {
           xfbml      : true, 
           version    : 'v2.5'
       });
-    }.bind(this);
-
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0]
-        if (d.getElementById(id)) return
-        js = d.createElement(s)
-        js.id = id
-        js.src = "//connect.facebook.net/en_US/sdk.js"
-        fjs.parentNode.insertBefore(js, fjs)
-    }(document, 'script', 'facebook-jssdk'))
-
+    }.bind(this)
   }
 
-  fetchPhoto(param) {
+  fetchPhoto(param, download = false) {
     const API_KEY = '22d755333143d59a8861c58102d4002774fa4be5ad94e7adff60a54c2be7efe7'
-    const url = `https://api.unsplash.com/photos/${param}?client_id=${API_KEY}`
+    const url = `https://api.unsplash.com/photos/${download ? (param + '/download') : param}?client_id=${API_KEY}`
+
+    console.log('wat happens')
 
     axios.get(url)
       .then((response) => {
+        if (download) {
+          console.log(response)
+          window.location = response.data.url
+          // window.open(response.data.url)
+          return
+        }
         this.setState({
           photo: {...response.data}
         })
@@ -85,15 +92,17 @@ class PhotoPage extends Component {
 
     const fbComponent = <div className='fb-like' data-href={url} data-layout='box_count' data-action='like' data-size='small' data-show-faces='true' data-share='true'></div>
 
+    const downloadButton = <button onClick={() => this.fetchPhoto(id, true)}>{'\u2193'}</button>
+
     return (
       <div className='photoContainer'>
-        <div className='photoDetails'>               
+        <div className='photoDetails'>    
+        {fbComponent}           
           <div className='infos'>
             <p>Photo by {user}</p>
-            <p>Likes: {likes}</p>
             <p>Downloads: {downloads} </p>
           </div>
-          {fbComponent}
+          <div className='downloadButton'>{downloadButton}</div>
         </div>
 
         <ProgressiveImage src={regular} placeholder={thumb}>

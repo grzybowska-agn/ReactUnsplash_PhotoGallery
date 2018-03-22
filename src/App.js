@@ -36,7 +36,9 @@ class App extends Component {
       .then((response) => {
         const sortChange = (sort !== this.state.sort)
         const isMoreAvailable = Boolean(response.data && response.data.length)
-        let dataUpdated = thisCollectionData ? data.filter(item => item.id === id) : data
+        let dataUpdated = thisCollectionData ? data.filter(item => item.id !== id) : data
+
+        console.log(dataUpdated)
 
         dataUpdated = [{
           id: id,
@@ -44,6 +46,8 @@ class App extends Component {
           photos: (thisCollectionData && !sortChange) ? [...thisCollectionData.photos, ...response.data] : [...response.data],
           canFetchMore: isMoreAvailable
         }, ...dataUpdated]
+
+        console.log(dataUpdated)
 
         this.setState({
           data: [...dataUpdated],
