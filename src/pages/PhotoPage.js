@@ -9,8 +9,7 @@ class PhotoPage extends Component {
   constructor() {
     super()
     this.state = {
-      photo: null,
-      fbLoadApi: false
+      photo: null
     }
 
     this.fetchPhoto = this.fetchPhoto.bind(this)
@@ -45,6 +44,7 @@ class PhotoPage extends Component {
         js.src = "//connect.facebook.net/en_US/sdk.js"
         fjs.parentNode.insertBefore(js, fjs)
     }(document, 'script', 'facebook-jssdk'))
+
   }
 
   fetchPhoto(param) {
@@ -53,7 +53,6 @@ class PhotoPage extends Component {
 
     axios.get(url)
       .then((response) => {
-        console.log(response.data)
         this.setState({
           photo: {...response.data}
         })
@@ -64,7 +63,7 @@ class PhotoPage extends Component {
   }
 
   renderPhoto() {
-    const { photo } = this.state
+    const { photo, fbLoadApi } = this.state
     const { history: { location: { pathname } } } = this.props
     const { protocol, host } = window.location
 
@@ -108,14 +107,14 @@ class PhotoPage extends Component {
 
   render() {
     const { photo } = this.state
-    const { history: { goBack } } = this.props
+    const { history: { goBack, length } } = this.props
     const route = 'photo'
 
     return (
       <div>
-        <Header goBack={goBack} route={route}/>
+        <Header goBack={goBack} route={route} shouldGoBack={length >= 2} />
         <div className='photoPage'>
-        { photo ? this.renderPhoto() : <Loader />}
+        {photo ? this.renderPhoto() : <Loader />}
         </div>
       </div>
     )

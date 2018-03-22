@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import './PhotoThumbnail.scss'
 
@@ -45,6 +46,10 @@ class PhotoThumbnail extends Component {
       </Link>
       )
   }
+}
+
+PhotoThumbnail.propTypes = {
+  photo: PropTypes.object.isRequired
 }
 
 export default PhotoThumbnail

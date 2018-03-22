@@ -9,7 +9,7 @@ class CollectionPage extends Component {
     const name = collections.find(item => item.id === parseInt(id)).name
     const route = 'collection'
 
-    return <CollectionPreview name={name} id={id} perPage={40} route={route} {...this.props} />
+    return <CollectionPreview name={name} id={parseInt(id)} perPage={40} route={route} {...this.props} />
   }
 
   render() {
@@ -18,7 +18,7 @@ class CollectionPage extends Component {
 
     return (
       <div>
-        <Header goBack={goBack} shouldGoBack={length > 2} route={route} />
+        <Header goBack={goBack} shouldGoBack={length >= 2} route={route} />
         {this.renderCollection()}
       </div>
     )
@@ -26,7 +26,9 @@ class CollectionPage extends Component {
 }
 
 CollectionPage.propTypes = {
-  collections: PropTypes.array.isRequired
+  collections: PropTypes.array.isRequired,
+  fetchCollection: PropTypes.func.isRequired,
+  fetchMoreOnScroll: PropTypes.func.isRequired,
 }
 
 export default CollectionPage

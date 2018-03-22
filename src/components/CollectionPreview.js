@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import PhotoThumbnail from './PhotoThumbnail'
@@ -129,6 +130,17 @@ class CollectionPreview extends Component {
         </div>
       )
   }
+}
+
+CollectionPreview.propTypes = {
+  name: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  route: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired,
+  fetchCollection: PropTypes.func.isRequired,
+  fetchMoreOnScroll: PropTypes.func,
+  isFetching: PropTypes.bool.isRequired
 }
 
 export default CollectionPreview

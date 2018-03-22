@@ -47,7 +47,10 @@ class Header extends Component {
 
 Header.propTypes = {
   title: PropTypes.string,
-  description: PropTypes.string
+  description: PropTypes.string,
+  route: PropTypes.string.isRequired,
+  goBack: PropTypes.func,
+  shouldGoBack: PropTypes.bool
 }
 
 export default Header

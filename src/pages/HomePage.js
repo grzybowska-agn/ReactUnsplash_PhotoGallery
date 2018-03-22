@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Header from './../components/Header'
 import CollectionPreview from './../components/CollectionPreview'
-
 
 class HomePage extends Component {
   renderCollections() {
@@ -25,6 +25,11 @@ class HomePage extends Component {
       </div>
     )
   }
+}
+
+HomePage.propTypes = {
+  collections: PropTypes.array.isRequired,
+  fetchCollection: PropTypes.func.isRequired,
 }
 
 export default HomePage
