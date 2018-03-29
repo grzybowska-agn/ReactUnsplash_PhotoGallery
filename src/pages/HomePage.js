@@ -29,7 +29,7 @@ class HomePage extends Component {
 
 HomePage.propTypes = {
   collections: PropTypes.array.isRequired,
-  fetchCollection: PropTypes.func.isRequired,
+  fetchCollection: PropTypes.func.isRequired
 }
 
 export default HomePage

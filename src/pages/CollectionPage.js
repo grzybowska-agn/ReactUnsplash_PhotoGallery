@@ -28,7 +28,7 @@ class CollectionPage extends Component {
 CollectionPage.propTypes = {
   collections: PropTypes.array.isRequired,
   fetchCollection: PropTypes.func.isRequired,
-  fetchMoreOnScroll: PropTypes.func.isRequired,
+  fetchMoreOnScroll: PropTypes.func.isRequired
 }
 
 export default CollectionPage
