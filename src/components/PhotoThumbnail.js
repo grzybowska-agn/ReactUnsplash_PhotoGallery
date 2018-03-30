@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import css from './PhotoThumbnail.scss'
 
+
 class PhotoThumbnail extends Component {
   constructor() {
     super()
@@ -24,8 +25,13 @@ class PhotoThumbnail extends Component {
   }
 
   render() {
-    const { photo: { id, likes, urls: { thumb }, user: { name } } } = this.props
+    const { photo, photo: { id, likes, urls: { thumb }, user: { name } } } = this.props
     const { showInfo } = this.state
+
+
+    if (!photo) {
+      return false
+    }
 
     return (
       <Link to={`/photo/${id}`}>

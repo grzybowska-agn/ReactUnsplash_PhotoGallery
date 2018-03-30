@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Header from './../components/Header'
-import CollectionPreview from './../components/CollectionPreview'
+import Collection from './../components/Collection'
+import store from './../store/CollectionStore'
 
 class CollectionPage extends Component {
   renderCollection() {
@@ -9,7 +10,7 @@ class CollectionPage extends Component {
     const name = collections.find(item => item.id === parseInt(id)).name
     const route = 'collection'
 
-    return <CollectionPreview name={name} id={parseInt(id)} perPage={40} route={route} {...this.props} />
+    return <Collection store={store} name={name} id={parseInt(id)} perPage={30} route={route} {...this.props} />
   }
 
   render() {
@@ -26,9 +27,7 @@ class CollectionPage extends Component {
 }
 
 CollectionPage.propTypes = {
-  collections: PropTypes.array.isRequired,
-  fetchCollection: PropTypes.func.isRequired,
-  fetchMoreOnScroll: PropTypes.func.isRequired
+  collections: PropTypes.array.isRequired
 }
 
 export default CollectionPage
