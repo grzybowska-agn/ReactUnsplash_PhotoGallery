@@ -4,7 +4,7 @@ import axios from 'axios'
 import HomePage from './pages/HomePage'
 import CollectionPage from './pages/CollectionPage'
 import PhotoPage from './pages/PhotoPage'
-import './App.scss'
+import css from './App.scss'
 
 class App extends Component {
   constructor() {
@@ -38,16 +38,12 @@ class App extends Component {
         const isMoreAvailable = Boolean(response.data && response.data.length)
         let dataUpdated = thisCollectionData ? data.filter(item => item.id !== id) : data
 
-        console.log(dataUpdated)
-
         dataUpdated = [{
           id: id,
           page: (perPage > 10) ? page + 1 : 1,
           photos: (thisCollectionData && !sortChange) ? [...thisCollectionData.photos, ...response.data] : [...response.data],
           canFetchMore: isMoreAvailable
         }, ...dataUpdated]
-
-        console.log(dataUpdated)
 
         this.setState({
           data: [...dataUpdated],

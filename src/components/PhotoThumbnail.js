@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import './PhotoThumbnail.scss'
+import css from './PhotoThumbnail.scss'
 
 class PhotoThumbnail extends Component {
   constructor() {
@@ -30,7 +30,7 @@ class PhotoThumbnail extends Component {
     return (
       <Link to={`/photo/${id}`}>
          <div 
-          className='photoItem'
+          className={css.photoItem}
           onMouseEnter={() => this.onMouseEnter()}
           onMouseLeave={() => this.onMouseLeave()}
         >
@@ -38,7 +38,7 @@ class PhotoThumbnail extends Component {
           <img src={thumb} alt={`photo by: ${name}`} />
 
            {showInfo && 
-            <div className='showInfo'>
+            <div className={css.showInfo}>
               <p>{`Photo by: ${name}`}</p>
               <p>{`Number of likes: ${likes}`}</p>
             </div>}

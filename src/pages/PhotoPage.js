@@ -3,7 +3,7 @@ import axios from 'axios'
 import ProgressiveImage from 'react-progressive-image'
 import Header from './../components/Header'
 import Loader from './../components/Loader'
-import './PhotoPage.scss'
+import css from './PhotoPage.scss'
 
 class PhotoPage extends Component {
   constructor() {
@@ -50,14 +50,10 @@ class PhotoPage extends Component {
     const API_KEY = '22d755333143d59a8861c58102d4002774fa4be5ad94e7adff60a54c2be7efe7'
     const url = `https://api.unsplash.com/photos/${download ? (param + '/download') : param}?client_id=${API_KEY}`
 
-    console.log('wat happens')
-
     axios.get(url)
       .then((response) => {
         if (download) {
-          console.log(response)
           window.location = response.data.url
-          // window.open(response.data.url)
           return
         }
         this.setState({
@@ -90,19 +86,19 @@ class PhotoPage extends Component {
       filter: 'none'
     }
 
-    const fbComponent = <div className='fb-like' data-href={url} data-layout='box_count' data-action='like' data-size='small' data-show-faces='true' data-share='true'></div>
+    const fbComponent = <div className={css.fbLike} className='fb-like' data-href={url} data-layout='box_count' data-action='like' data-size='small' data-show-faces='true' data-share='true'></div>
 
     const downloadButton = <button onClick={() => this.fetchPhoto(id, true)}>{'\u2193'}</button>
 
     return (
-      <div className='photoContainer'>
-        <div className='photoDetails'>    
+      <div className={css.photoContainer}>
+        <div className={css.photoDetails}>    
         {fbComponent}           
-          <div className='infos'>
+          <div className={css.infos}>
             <p>Photo by {user}</p>
             <p>Downloads: {downloads} </p>
           </div>
-          <div className='downloadButton'>{downloadButton}</div>
+          <div className={css.downloadButton}>{downloadButton}</div>
         </div>
 
         <ProgressiveImage src={regular} placeholder={thumb}>
@@ -122,7 +118,7 @@ class PhotoPage extends Component {
     return (
       <div>
         <Header goBack={goBack} route={route} shouldGoBack={length >= 2} />
-        <div className='photoPage'>
+        <div className={css.photoPage}>
         {photo ? this.renderPhoto() : <Loader />}
         </div>
       </div>

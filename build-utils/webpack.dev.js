@@ -16,59 +16,6 @@ const config = {
     filename: '[name].js'
   },
   devtool: 'inline-source-map',
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              camelCase: true,
-              sourceMap: true
-            }
-          }
-        ]
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            },
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              config: {
-                ctx: {
-                  autoprefixer: {
-                    browsers: 'last 2 versions'
-                  }
-                }
-              },
-              sourceMap: true
-            }
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
-            },
-          }
-        ]
-      }
-    ]
-  },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ],

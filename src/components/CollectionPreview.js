@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import PhotoThumbnail from './PhotoThumbnail'
 import Loader from './Loader'
-import './CollectionPreview.scss'
+import css from './CollectionPreview.scss'
 
 class CollectionPreview extends Component {
   constructor(props) {
@@ -97,13 +97,13 @@ class CollectionPreview extends Component {
     const { sortOptions } = this.state
 
     const buttons = sortOptions.map((option, index) => {
-      const className = option.active ? 'active' : null
+      const className = option.active ? css.active : null
 
       return <button key={index} className={className} onClick={() => this.onSort(option)}>{option.label}</button>
     })
 
     return (
-      <div className='sortOptions'>      
+      <div className={css.sortOptions}>      
         sort: {buttons}
       </div>
     )
@@ -113,16 +113,16 @@ class CollectionPreview extends Component {
     const { name, id, isFetching, route } = this.props
     const { photos } = this.state
 
-    const title = <h2 className='collectionTitle'>{name}</h2>
+    const title = <h2 className={css.collectionTitle}>{name}</h2>
 
       return (
-        <div className='photoPanel'>
-          <div className='photoPanelTop'>
+        <div className={css.photoPanel}>
+          <div className={css.photoPanelTop}>
             {route === 'collection' ? title : <Link to={`/collection/${id}`}>{title}</Link>}   
             {route === 'collection' && this.renderSortOptions()}
           </div>
 
-          <div className='photoGrid'>
+          <div className={css.photoGrid}>
             {this.renderPhotos()}
           </div>
 
