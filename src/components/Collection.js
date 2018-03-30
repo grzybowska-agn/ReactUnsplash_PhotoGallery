@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import { observer } from 'mobx-react'
 import PhotoThumbnail from './PhotoThumbnail'
 import Loader from './Loader'
-import css from './CollectionPreview.scss'
+import css from './Collection.scss'
 
-class CollectionPreview extends Component {
-  constructor(props) {
-    super(props)
+@observer
+class Collection extends Component {
+  constructor() {
+    super()
     this.state = {
-      photos: props.data.find(item => item.id === props.id) ? [...props.data.find(item => item.id === props.id).photos] : [],
       sortOptions: [
         {id: 1, label: 'latest', value: 'latest', active: true},
         {id: 2, label: 'most popular', value: 'popular', active: false}
@@ -21,11 +21,14 @@ class CollectionPreview extends Component {
   }
 
   componentDidMount() {
-    const { data, fetchCollection, fetchMoreOnScroll, id, perPage, route } = this.props
-    const dataAlreadyFetched = data.find(item => item.id === id)
+    const { id, perPage, route, store: { currentCollection, fetchCollection } } = this.props
+    const { sortOptions } = this.state
 
-    if (!dataAlreadyFetched || (dataAlreadyFetched.canFetchMore && (route === 'collection'))) {
-      fetchCollection(id, perPage)
+    const sort = sortOptions.find(item => item.active === true).value
+    const collection = currentCollection(id, sort)
+
+    if (!collection || (route === 'collection' && (collection.photos.length < 30))) {
+      fetchCollection(id, perPage, sort)
     }
 
     if (route === 'collection') {
@@ -34,51 +37,48 @@ class CollectionPreview extends Component {
   }
 
   componentWillUnmount() {
-    const { fetchMoreOnScroll, route } = this.props
+    const { route } = this.props
 
     if (route === 'collection') {
       document.removeEventListener('scroll', this.onScroll)
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { id, fetchMoreOnScroll, route, data } = this.props
-    const { photos } = this.state
-
-    const next = {...nextProps.data.find(item => item.id === id)}
-    const current = {...data.find(item => item.id === id)}
-
-    if (current.canFetchMore && (next.canFetchMore !== current.canFetchMore)) {
-      document.removeEventListener('scroll', this.onScroll)
-    }
-
-    if (!next.photos) {
-      return false
-    }
-
-    if ((next.photos.length > photos.length) || (next.photos[0].id !== photos[0].id)) {
-      this.setState({
-        photos: [...next.photos]
-      })
-    }
-  }
-
   onScroll() {
-    const { id, fetchMoreOnScroll } = this.props
-    fetchMoreOnScroll(id)
+    const { id, store: { currentCollection, fetchCollection, isFetching } } = this.props
+    const { sortOptions } = this.state
+
+    const sort = sortOptions.find(item => item.active === true).value
+    const collection = currentCollection(id, sort)
+
+    const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop
+    const scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight
+    const clientHeight = document.documentElement.clientHeight || window.innerHeight
+
+    if (scrollTop + clientHeight >= scrollHeight)  {    
+      if (isFetching || !collection.canFetchMore) return false
+      fetchCollection(id, 30, sort)
+    }
   }
 
   renderPhotos() {
-    const { route } = this.props
-    const { photos } = this.state
+    const { route, id, store: { currentCollection } } = this.props
+    const { sortOptions } = this.state
 
-    const photosToRender = (route === 'home' && photos.length > 10) ? photos.slice (0, 10) : photos
+    const sort = sortOptions.find(item => item.active === true).value
+    const collection = currentCollection(id, sort)
 
-    return photosToRender.map(photo => <PhotoThumbnail key={photo.id} photo={photo} />)
+    let photos = collection ? [...collection.photos] : []
+
+    if (route === 'home' && photos.length > 10) {
+      photos = photos.slice(0, 10)
+    }
+
+    return photos.map(photo => <PhotoThumbnail key={photo.id} photo={photo} />)
   }
 
   onSort(item) {
-    const { id, fetchCollection } = this.props
+    const { id, store: { fetchCollection, currentCollection } } = this.props
     const { sortOptions } = this.state
 
     if (item.active) return false
@@ -88,9 +88,11 @@ class CollectionPreview extends Component {
     optionsUpdated.find(option => option.id === item.id).active = true
     optionsUpdated.find(option => option.id !== item.id).active = false
 
+    const collection = currentCollection(id, item.value)
+
     this.setState({
       sortOptions: optionsUpdated
-    }, () => fetchCollection(id, 40, true, item.value))
+    }, () => (!collection || collection.photos.length < 30) ? fetchCollection(id, 30, item.value) : null)
   }
 
   renderSortOptions() {
@@ -110,13 +112,13 @@ class CollectionPreview extends Component {
   }
 
   render() {
-    const { name, id, isFetching, route } = this.props
-    const { photos } = this.state
+    const { name, id, route, store: { isFetching } } = this.props
 
     const title = <h2 className={css.collectionTitle}>{name}</h2>
 
       return (
         <div className={css.photoPanel}>
+
           <div className={css.photoPanelTop}>
             {route === 'collection' ? title : <Link to={`/collection/${id}`}>{title}</Link>}   
             {route === 'collection' && this.renderSortOptions()}
@@ -132,15 +134,12 @@ class CollectionPreview extends Component {
   }
 }
 
-CollectionPreview.propTypes = {
+Collection.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,
   route: PropTypes.string.isRequired,
-  data: PropTypes.array.isRequired,
-  fetchCollection: PropTypes.func.isRequired,
-  fetchMoreOnScroll: PropTypes.func,
-  isFetching: PropTypes.bool.isRequired
+  store: PropTypes.object.isRequired
 }
 
-export default CollectionPreview
+export default Collection

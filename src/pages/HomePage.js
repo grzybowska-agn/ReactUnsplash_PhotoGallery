@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Header from './../components/Header'
-import CollectionPreview from './../components/CollectionPreview'
+import Collection from './../components/Collection'
+import store from './../store/CollectionStore'
 
 class HomePage extends Component {
   renderCollections() {
@@ -10,7 +11,7 @@ class HomePage extends Component {
 
     return collections.map(collection => {
       const { id, name } = collection
-      return <CollectionPreview key={id} name={name} id={id} perPage={10} route={route} {...this.props} />
+      return <Collection store={store} key={id} name={name} id={id} perPage={10} route={route} {...this.props} />
     })
   }
 
@@ -28,8 +29,7 @@ class HomePage extends Component {
 }
 
 HomePage.propTypes = {
-  collections: PropTypes.array.isRequired,
-  fetchCollection: PropTypes.func.isRequired
+  collections: PropTypes.array.isRequired
 }
 
 export default HomePage

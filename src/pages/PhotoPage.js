@@ -1,26 +1,22 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import ProgressiveImage from 'react-progressive-image'
 import Header from './../components/Header'
 import Loader from './../components/Loader'
 import css from './PhotoPage.scss'
 
+@observer
 class PhotoPage extends Component {
-  constructor() {
-    super()
-    this.state = {
-      photo: null
-    }
-
-    this.fetchPhoto = this.fetchPhoto.bind(this)
-  }
 
   componentDidMount() {
     const { id } = this.props.match.params
-    const { photo } = this.state
+    const { currentPhoto, fetchPhoto } = this.props.store
+
+    const photo = currentPhoto(id)
 
     if (!photo) {
-      this.fetchPhoto(id, false)
+      fetchPhoto(id, false)
     }
 
     this.fbLoadApi()
@@ -34,7 +30,7 @@ class PhotoPage extends Component {
       js.id = id
       js.src = "//connect.facebook.net/en_US/sdk.js"
       fjs.parentNode.insertBefore(js, fjs)
-  }(document, 'script', 'facebook-jssdk'))
+    }(document, 'script', 'facebook-jssdk'))
 
     window.fbAsyncInit = function() {
       FB.init({
@@ -46,40 +42,26 @@ class PhotoPage extends Component {
     }.bind(this)
   }
 
-  fetchPhoto(param, download = false) {
-    const API_KEY = '22d755333143d59a8861c58102d4002774fa4be5ad94e7adff60a54c2be7efe7'
-    const url = `https://api.unsplash.com/photos/${download ? (param + '/download') : param}?client_id=${API_KEY}`
-
-    axios.get(url)
-      .then((response) => {
-        if (download) {
-          window.location = response.data.url
-          return
-        }
-        this.setState({
-          photo: {...response.data}
-        })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+  onClick(url) {
+    window.location = url
   }
 
   renderPhoto() {
-    const { photo, fbLoadApi } = this.state
-    const { history: { location: { pathname } } } = this.props
+    const { history: { location: { pathname } }, match: { params: { id } } } = this.props
     const { protocol, host } = window.location
+    const { currentPhoto } = this.props.store
 
+    const photo = currentPhoto(id)
     const url = protocol + '//' + host + pathname
 
-    const { 
-      id, created_at: date, downloads, likes, description, width, height,
-      urls: { regular, thumb }, user: { name: user, bio, location }
-    } = photo 
+
+    if (!photo) return false
+
+    const { downloads, likes, urls: { regular, thumb, raw }, user: { name: user } } = photo
 
     const loadingStyle = {
       height: '650vh',
-      filter: 'blur(3px)'
+      filter: 'blur(3px)' 
     }
 
     const style = {
@@ -88,7 +70,7 @@ class PhotoPage extends Component {
 
     const fbComponent = <div className={css.fbLike} className='fb-like' data-href={url} data-layout='box_count' data-action='like' data-size='small' data-show-faces='true' data-share='true'></div>
 
-    const downloadButton = <button onClick={() => this.fetchPhoto(id, true)}>{'\u2193'}</button>
+    const downloadButton = <button onClick={() => this.onClick(raw)}>{'\u2193'}</button>
 
     return (
       <div className={css.photoContainer}>
@@ -111,7 +93,6 @@ class PhotoPage extends Component {
   }
 
   render() {
-    const { photo } = this.state
     const { history: { goBack, length } } = this.props
     const route = 'photo'
 
@@ -119,11 +100,15 @@ class PhotoPage extends Component {
       <div>
         <Header goBack={goBack} route={route} shouldGoBack={length >= 2} />
         <div className={css.photoPage}>
-        {photo ? this.renderPhoto() : <Loader />}
+        {this.renderPhoto() || <Loader />}
         </div>
       </div>
     )
   }
+}
+
+PhotoPage.propTypes = {
+  store: PropTypes.object.isRequired
 }
 
 export default PhotoPage
