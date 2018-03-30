@@ -35,10 +35,12 @@
 
     }
 
-    .fb-like {
-      position: absolute;
-      top: calc(100% + 30px);
-      right: 16px;
+    :global {
+      .fb-like {
+        position: absolute;
+        top: calc(100% + 30px);
+        right: 16px;
+      }
     }
 
     .downloadButton {
