@@ -3,6 +3,8 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
+const env = process.env.NODE_ENV
+
 const config = {
   output: {
     path: commonPaths.outputPath,
@@ -26,7 +28,7 @@ const config = {
                 modules: true,
                 importLoaders: 2,
                 localIdentName: '[name]__[local]___[hash:base64:5]',
-                minimize: true
+                minimize: env === 'production' ? true : false
               }
             },
             {
