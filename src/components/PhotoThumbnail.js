@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import LazyLoad from 'react-lazyload'
 import css from './PhotoThumbnail.scss'
-
 
 class PhotoThumbnail extends Component {
   constructor() {
@@ -40,9 +40,9 @@ class PhotoThumbnail extends Component {
           onMouseEnter={() => this.onMouseEnter()}
           onMouseLeave={() => this.onMouseLeave()}
         >
-
-          <img src={thumb} alt={`photo by: ${name}`} />
-
+          <LazyLoad height={200}>
+            <img src={thumb} alt={`photo by: ${name}`} />
+          </LazyLoad>
            {showInfo && 
             <div className={css.showInfo}>
               <p>{`Photo by: ${name}`}</p>

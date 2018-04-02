@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import CollectionPage from './pages/CollectionPage'
-import PhotoPage from './pages/PhotoPage'
+import asyncComponent from './components/AsyncHoc'
 import store from './store/PhotoStore'
 import './App.scss'
+
+const HomePage = asyncComponent(() => import('./pages/HomePage'))
+const CollectionPage = asyncComponent(() => import('./pages/CollectionPage'))
+const PhotoPage = asyncComponent(() => import('./pages/PhotoPage'))
 
 class App extends Component {
   constructor() {

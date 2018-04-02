@@ -5,7 +5,10 @@ const CompressionPlugin = require("compression-webpack-plugin")
 const config = {
   mode: 'production',
   entry: {
-    app: `${commonPaths.appEntry}/index.js`
+    app: [
+      'babel-polyfill',
+      `${commonPaths.appEntry}/index.js`
+    ]
   },
   output: {
     filename: 'static/[name].js'
