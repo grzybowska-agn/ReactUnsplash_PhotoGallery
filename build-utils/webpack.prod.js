@@ -1,5 +1,6 @@
 const commonPaths = require('./common-paths')
 const webpack = require('webpack')
+const CompressionPlugin = require("compression-webpack-plugin")
 
 const config = {
   mode: 'production',
@@ -22,7 +23,16 @@ const config = {
         ]
       }  
     ]
-  }
+  },
+  plugins: [
+    new CompressionPlugin({
+      asset: "[path].gz[query]",
+      algorithm: "gzip",
+      test: /\.js$|\.css$|\.html$/,
+      threshold: 0,
+      minRatio: 0.8
+    })
+  ]
 }
 
 module.exports = config
