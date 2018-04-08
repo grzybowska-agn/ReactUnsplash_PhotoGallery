@@ -1,0 +1,7 @@
+{
+  "name": "photo-app",
+  "lang": "pl-PL",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "theme_color": "#fff"
+}
